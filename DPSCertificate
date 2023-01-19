@@ -1,0 +1,26 @@
+In order to enroll device using x509 certificates with enrollment group in Device Povisioning service, we need chain of x509 certificate and device certificate. 
+This is only applicable in development environment.
+For production environment, we should use certificates that are signed by trusted certificate authority like DigiCert.
+
+To generate certificate we will use the script from the below repo provided by microsoft
+https://github.com/Azure/azure-iot-sdk-c/blob/main/tools/CACertificates/ca-certs.ps1
+
+Open Powershell ISE in admin mode
+Set execution policy to unresricted to allow powershell to run the script
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+2. We need to have openssl installed. If it is not installed, install using Chocolatey software or from https://www.openssl.org/.
+Point the env variable to cnf file in your installation
+3. $ENV:OPENSSL_CONF="C:\Program Files\Git\usr\ssl\openssl.cnf"
+4. Load THE script in powrshell
+6. Verify that all prereqs are in order: Test-CACertsPrerequisites
+7. Generate certificate chain using the cmd "New-CACertsCertChain ecc"
+ecc indicates encryption method to use. Ecc stands for eeliptic curve cryptography is recommended for ca certfs, rsa can be used if you are creating certfs for
+edge
+Console message states that it has generated 3 intermediate ca certificates and 1 rootca certficate
+
+Next step is to generate client certificates for sample iot devices under intermediate certificate at level1
+New-CACertsDevice DemoDevice1 -signingCertSubject "CN=Azure IoT CA TestOnly Intermediate 1 CA"
+New-CACertsDevice DemoDevice2 -signingCertSubject "CN=Azure IoT CA TestOnly Intermediate 1 CA"
+
+Whole certificate chain (Root certificate, Intermediate certificate, Client certificate) is now in place.
+
