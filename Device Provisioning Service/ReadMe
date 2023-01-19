@@ -1,0 +1,66 @@
+Here, We will enroll device with DPS and register the device with IOTHUB using x509 certificates
+
+In the azure portal 
+1. Create a new Resource Group. All our resources will be created in the same resource group.
+2. Create IOT Hub in Free tier
+3. Create a new Device Provisioning Service
+Choose the subscription, resource group, DPS name and region where the DPS service has to be created.
+4. Link the IOTHub in DPS. Go to Device Provisioning Service -> Linked iothubs under settings -> Add -> 
+Select the subscription, IOT Hub, Access Policy as “iothubowner” ->  Save
+5. To prove that device enrollments are working. We will store the messages that are going to the iot hub by adding a route that sends all telemetry to blob storage
+6. For this we have to add custom storage endpoint. Go to iothub -> Hub settings -> Message routing -> Custom endpoints tab -> Add -> Storage
+	Pick a container -> Add new Storage Account -> give it a name and make sure it is in same region as the iothub to minimize latency and save it
+	Add new container called messages, select the container for the new endpoint: Endpoint1. Select encoding as json. Create the endpoint
+	Add the endpoint to the route. To tell the route we want to process telemetry message, select data source as Device Telemetry Messages
+Add a route -> route 1 -> select custom endpoint
+Routing query = true takes all the messages -> save -> 
+
+Now we have dps which is linked to hub that saves all messages to blob storage
+
+Generate the certificates using steps mentioned in https://github.com/vaishali-jain/ExploreAZ220/blob/main/DPSCertificate
+
+To use the certificate in DPS, we have to save the certificates to file
+On your laptop/machine, Go to certificate manager -> certificates for your machine can be seen in Personal -> Certificates
+There are 2 kinds of export we need for our example
+Right click root certificate -> All Tasks -> export -> Next -> Base-64 encoded x609(.cer) file -> Save -> Next -> Finish
+When we use certificate attestation from code to register a device with the dps we need pfx format to load the certf from code.
+In certificate manager -> Right click device certificate -> Next -> Select Yes, export the private key -> Select Personal Information Exchange (PFX)
+Next Select password and enter password -> Next -> Save the file
+
+Upload the certificate to DPS 
+
+Portal -> DPS->Certificates->Add -> enter the certificate name ->upload the rootca cer file
+It needs to be verified. Verification is a way of proving to the service that you are legitimateowner of the certf.
+You can either follow the article: https://learn.microsoft.com/en-in/azure/iot-dps/how-to-verify-certificates to verify certificate or check the option to 
+auto verify the certificate
+To verify certificate, select it and click on Generate verf code
+To complete proof of possession, we must create a certificate with this verification code in the subject and then sign it with a private key that is 
+associated with the ca certificate
+Copy verificateion code, goto powersheell script
+New-CACertsVerificationCert "enter verfication code"
+This generates a new certificate. Upoad this certificate to portal for verification -> Verify
+Once the certificate is verified. We will now create an Enrollment Group
+
+We will cover the following topics:
+1. Group and Individual enrollments
+2. Register device and send telemetry messages using console app
+3. Enroll Device
+4. Disenroll Device
+5. Deprovision Device
+
+1. Navigate to DPS in Azure portal
+2. Manage enrollments -> Add enrollment group for the root certificate
+Enter the group name
+Select Attestation Type as Certificate
+Certificate Type is CA certificate
+Select the Primary Certificate we added in previous steps
+Select the IOT hub and click on save
+This enrollment group allows registration from any device that presents a valid certificate inside the root certificate path
+1. In the DPS, Add Enrollment Group using attestation type as Certificate and 
+In the Azure portal -> Select the DPS -> Settings -> Manage Enrollments -> Add enrollment Group -> 
+
+
+
+
+
+
