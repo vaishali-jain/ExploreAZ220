@@ -1,0 +1,69 @@
+Managing IOT Central with Azure CLI
+List all iot central applications in a resource group
+az iot central app list --resource-group my-rg
+Create an Application
+az iot central app create
+              --resource-group my-rg
+              --name my-app
+              --subdomain myappdomain
+              --display-name "my sample app"
+              --location Europe
+              --sku ST0
+Here ST0 is a pricing tier, if not specified, it defaults to Standard 2
+Update an Application to change the existing application one or more properties at once
+az iot central app update
+             --resource-group my-rg
+             --name my-app
+             --set subdomain=mynewdomain
+             --set displayName="My new name"
+Delete an Application
+az iot central app delete
+              --resource-group my-rg
+              --name my-app
+Get Registration info for all devices in an application with id my-app-id.
+To find the application id there are 2 ways:
+1. Navigate to Iot central website -> Settings -> Application -> Management -> Application Id
+2. Navigate to IOT central in Azure portal -> Settings -> Properties -> Application Id
+This query can take long time to run if there are lots of devices in the application
+az iot central diagnostics registration-summary
+              --app-id my-app-id
+Monitor Device Telemetry : shows the telemery sent from devices to iotcentral. By default it shows telemery for all devices. For a specific device include 
+device-id in the command
+properties parameter indicates which kind of properties to output :  system propeties, application properies or all kinds
+az iot central diagnostics monitor-events
+              --app-id my-app-id
+              --device-id device-id1
+              --properties all
+Monitor Property Updates: Shows reported and desired properties to and from the devices in IOT central
+az iot central diagnostics monitor-properties 
+          --app-id my-app-id
+          --device-id device-id1
+***Validate Messages against the device template : It checks the telemetry messages and outputs data that doesn't match the device template. Used to find 
+model mismatches, device id is optional, max messages indicate the max no. of messages to receive from the target device and it is optional. default value is 10,
+0 will get all messages
+az iot central diagnostics validate-messages
+          --app-id my-app-id-1
+          --device-id device-id1
+          --max-messages 20
+
+Validate Reported properties sent from a device to IOT central. It finds properties that are not modeled in the device template and also properties with the 
+same name in multiple interfaces. appid and device id are mandatory
+az iot central diagnostics validate properties
+          --app-id my-app-id
+          --device-id device-id1
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+Resources:
+https://learn.microsoft.com/en-us/cli/azure/iot/central/diagnostics?view=azure-cli-latest
