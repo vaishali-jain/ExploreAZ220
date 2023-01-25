@@ -56,6 +56,9 @@ az iot central diagnostics validate properties
 
 
 
+--------------------------------------------------------------------------------------------------------------
+IOT EDGE
+az iot hub device-identity create --device-id edgedevice1 --edge-enabled --hub-name iothubm022
 
 
 
