@@ -1,0 +1,53 @@
+Using powershell create self signed certificate
+.\GenerateTestCertificate.ps1
+.\GenerateTestCertificate.ps1 -deviceName "testDevice" -certificateValidityInYears 2
+
+*** Create X509 CA Certificates
+Install Open SSL
+Create the Certificate chain
+Configure IOT Hub
+Create device certificates
+
+or
+
+Purchase from a root authority
+Create using 3rd party tools
+Use an intermediate certificate signed by an existing root certificate
+
+*** Create IOT HUB Certificate
+az iot hub certificate create
+    --hub-name 
+    --name
+    --path
+Example below:
+az iot hub certificate create
+    --hub-name myhub
+    --name mycertificate
+    --path /certificates/Certificate .cer
+    
+*** Verifying a certificate
+1. Generate a Verification code
+az iot hub certificate generate-verification-code
+    --hub-name myhub
+    --name mycertificate
+    --etag AAAAAAAAA=
+    
+2. Verify a Cerificate
+az iot hub certificate verify 
+    --hub-name myhub
+    --name mycertificate
+    --path /certificates/Verification.pem
+    --etag AAAAAAAAAA=
+    
+ *** Managing Hub Certificates
+ 1. List Certificates
+ az iot hub certificate list --hub-name myhub
+ 2. Update Certificate
+ az iot hub certificate update 
+      --name mycertificate 
+      --path /certificates/NewCerificate.pem
+      --etag AAAAAAAAAAA=
+ 3. Delete Certificate
+ az iot hub certificate delete
+        --name mycertificate
+        --etag AAAAAAAAAA=
