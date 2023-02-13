@@ -1,0 +1,55 @@
+Securing the iot devices
+Factors affecting security
+1. Hardware limitations
+2. Supported technologies on the devices
+
+Options for authenticating iot devices with iot hub
+
+1. Client Certificates / x509 Certificates / Public Key Cryptography (standardized form of public key certificates)
+2. Widely used for authentication, digital signatures and encryption
+3. Here a pair of keys, a private and public key are used to encrypt and decrypt data
+4. Use of public and private keys make the certificates powerful
+5. Every certificate contains
+  a. Public key: part of the public/private key pair
+  b. Digital signature
+  c. Identity chain contains details of the certificate issuing authority. it is also used to ensure validity of the certificate
+  
+Certificate Types: 
+  a. Self-signed certificate 
+  b. CA - signed certificates (CA is Certificate Authority)
+      - Issued by thirdparty cerificate authority
+      - Has fully traceable identity chain known as certificate chain of trust
+      - Each certificate in the chain is issued and trusted by another , all leading back to root certificate authority
+      
+Certificate Authentication Types:
+1. Thumbprint auth
+2. Certificate Authority Authentication - here we are checking client certificate is signed by a trusted partner within your certificate chain
+      - CA authentication do not support HTTPS, MQTT OVER web sockets, AMQP over web sockets, File Uploads but are supported by X.509 thumbprint authentication
+Generally, certificates or device authentication are baked into the devices during manufacture
+
+Symmetric Keys: 
+  - Uses Single key to encrypt and decrypt data
+  - Less secure than x509 certificates
+  - Shared access signature provides a way of controlling the amount of access a particular user or service has the features within azure
+  - With iothub we can use shared signature access token to control the level of access an individual device  has to various features within iothub
+  - Widely supported on devices
+  - Do not store the symmetric key on device or in config file instead secure it in hardware security module which is dependent on the physical device you are
+  deploying. check with device manucturer
+  
+Shared Symmetric Keys:
+- Using a single key across all of your devices. 
+- Not at all safe
+- Anyone access to the keys can impersonate your devices
+- We can lose control of our iot devices
+
+Support for these technologies is often device dependent
+
+There are 2 main purposes of Primary and Secondary keys
+1. Keep your services running when you need to change a key. for ex: you have connected your devices using the primary key and if you would like to update the key 
+value . we could temporarily switch your device to use the secondary key , update the primary key , and then switch back. This eliminates any downtime you may have
+and ensures hat your services remain online.
+With services like azure storage , its common to use the secondary key to give access to your services to third parties
+
+  
+  
+
