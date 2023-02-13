@@ -1,0 +1,27 @@
+To work with Azure  iot hub using azure CLI, we need to use the Azure IOT module. Install it using the command
+az extension add --name azure-iot
+Make sure it is upto date with below command, if already installed
+az extension update --name azure-iot
+
+1. Create new iotdevice using default options. Azure creates automatically the symmetric keys
+az iot hub device-identity create
+    -n iothubm022
+    -d Device2
+    
+2. to use our own symmetric keys provide our own primary and secondary thumbprints
+az iot hub device identity create 
+    -n iothub1
+    -d device1
+    --primary-thumbprint BNDSHBDFBDJKsdjkhsjkfndkjfnJDNSJKFBEBF=
+    --secondary-thumbprint KEHFEJBFJWBFekfjkwebfjrbfrJJKFBEFBEB=
+    
+    
+ New device will be provisioned using the specified symmetric keys in the iothub mentioned
+ 
+ We have to use Microsoft.Azure.Devices.Client SDK to connect to iothub using the code and authenticate using symmetric keys
+ 
+ We have to specify the primary connection string and the transport protocol
+ 
+ In the CLI, we can monitor the message being received by using the monitor events command
+ 
+ az iot hub monitor-events -n iothub1
