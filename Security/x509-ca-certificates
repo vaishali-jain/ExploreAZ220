@@ -1,0 +1,30 @@
+In order to use X509 certificate based security in iothub, we need x509 certificate chain which includes root certificate and any intermediate certificates
+There are several ways to get ca certificates
+1. Purchase from root certificate authority - Recommended for production
+2. Creating our own certificate using thirdparty tools like open-ssl
+3. Use an intermediate certificate  signed by an existing root certificate
+
+1. install openssl
+2. use the scripts included in the SDK
+3. In an elevated powershell prompt, first we bring the functions required in the scope by running the ca-certs.ps1 script. this adds lot of helper functions to the 
+global namespace
+4. Create new certificate chain by running the New-CaCertsCertChain command. This will create certf and add them to windows certificate store. the intermediate 
+certificates will be signed by root certificate authority. one root certif and 3 interm certificates are created
+5. In the azure portal, add the certificates,
+Verify the certificate, we need to provide proof that we actually own this certificate. proof that we own it by creating a new cerificate with a special code in the
+subject line
+6. in the iothub, certificates, generate verification code, copy the code and switch back to powershell
+New-CACertsVerificationCert "verification code"
+This generates a verification certificate which then we need to upload to iothub
+7. now the iothub certificate is created and verified. We can now add a new device to iothub with x509ca signed authentication type
+8. To use this device, we have to create device certificate. in powershell, use below command to create device certificate
+New-CACertsDevice x509cadevice1
+This will create a cert and an associated pfx that will trace back to root certificate. We can now use this pfx to connect to iothub. Add pfc file to solution
+hee insetad of checking the certf against thumbprint, iothub checks the certificate chain
+if the device certi is valid and signed by root or intermediate certf then the device is authenticated
+
+
+
+root certificate, secures the iothub
+device certificates are self signed certificates or ca certificates
+we can manage them in azure cli using azure iot extension
