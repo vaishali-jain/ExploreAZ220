@@ -1,0 +1,52 @@
+az iot hub certificate create 
+--hub-name 
+--name
+--path //this is local path to the certificate file
+
+Example:
+az iot hub certificate create
+--hub-name hub1
+--name cerificate1
+--path /certificates/Certificate.cer
+
+*****Verifying a Certificate
+
+//Generate a verification code
+az iot hub certificate generate-verification-code
+--hub-name hub1
+--name certificate1
+--etag AAAAAAAAAAAAAA=
+
+This returns a verification code which can then be used to create verification certificate
+
+//Verify certificate
+az iot hub certificate verify 
+--hub-name hub1
+--name certificate1
+--path /Certificates/Verification.pem --etag AAAAAAAAAA=
+
+****************MAnaging hub cretificates
+// list certificate
+az iot hub certificate list --hub-name MyHub
+
+// update certificate
+az iot hub certificate update --name MyCertificate--path /certificates/NewCertificate.pem --etag AAAAAAAAAAA=
+
+// delete certificate
+az iot hub certificate delete --name MyCertificate --etag AAAAAAAAAAA=
+
+**********update primary and secondary thumbprints for a device provisioned  with a self-signed certif
+
+List all devices registered on hub
+az iot hub device-identity list --hubname hub1
+
+Get details of specific device by using show ommand
+az iot hub device-identity show --device-id x509deice1 --hub-name hub1
+
+To change primarh and secondary thumbprints used by a device
+az iot hub device-identity update device-id device1 --primary-thumbprint 343545rdjsfhgfbfhi93 --secondary-thumbprint sdsfbdhfg3434343hjghjv
+--hub-name hub1
+
+we have to manage thumbprint only thru azure cli but we can manage symmetric key in portal
+
+https://learn.microsoft.com/en-us/cli/azure/iot/hub/device-identity?view=azure-cli-latest
