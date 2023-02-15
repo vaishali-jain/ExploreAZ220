@@ -1,0 +1,14 @@
+> A console app acts as iot device. when it runs, it copntacts DPS and provisno the device. if successful, device provisioning service will return some credentials
+which we wil use to connect to iothub and send some data
+we wil use self signed certificate to do an indivdual enrollment
+Generate certificate and pfx file using the GenerateTestCertificate script
+in order for device to communicate with DPS, we need to configure an enrollment
+enrollment is adding device details to DPS
+Device enrllment is a record of a single device or a group of devices that may register with Device Provisioning service at some point in the future
+the enrollment record contains details of how the device will attest with DPS as well as the policy that determines how the iothub is assigned
+ex: we may have multiple iothubs and may want to assign devices evenly across them
+In the solution configure device. 
+  a. add pfx file to root of the solution 
+  b. configure url of DPS and idscope, certificate name, password
+  c. security provider tells client what security method we ae using i.e., x509
+  
