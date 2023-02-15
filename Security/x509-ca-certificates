@@ -3,7 +3,7 @@ There are several ways to get ca certificates
 1. Purchase from root certificate authority - Recommended for production
 2. Creating our own certificate using thirdparty tools like open-ssl
 3. Use an intermediate certificate  signed by an existing root certificate
-
+(each certf in the chain is signed by private key of previous certf. this arrangement establishes a chain of trust from the root certf)
 1. install openssl
 2. use the scripts included in the SDK
 3. In an elevated powershell prompt, first we bring the functions required in the scope by running the ca-certs.ps1 script. this adds lot of helper functions to the 
