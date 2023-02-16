@@ -1,0 +1,45 @@
+Azure Defender for IOT hub
+
+Offers agentless end to end monitoring of iot and ot devices
+It is for large scale enterprise deployments in a hybrid cloud env and also includes on-premise monitoring
+It is built into IOT HUB which makes deployment and management much easier
+offers unified end to end security solution
+
+
+https://github.com/Azure/Azure-IoT-Security/tree/master/security_module_twin/create_security_module
+https://julyot.dev/blog/julyot-day24-az220
+
+Demo: install and configure security agent on a device
+1. use ubuntu 18.8 image vm as device and enable ssh access
+2. install security gent
+3. the state of moduletwin changes to connected
+4. login to device by opening azure cloud shell and connect with ssh
+5. ssh admin@50.150.18.36
+6. configure this device to connect to iothub using c# version of security agent using device symmetric keys
+7. on our device we need to store the symmetric key in a file:
+echo "your key" > sym.key
+8. Download azure security agent
+https://github.com/Azure/Azure-IoT-Security-Agent-CS/tree/master/src/Agent/Linux/
+wget https://github.com/Azure/Azure-IoT-Security-Agent-CS/tree/master/src/Agent/Linux/...
+
+ https://github.com/Azure/Azure-IoT-Security-Agent-CS/releases/download/0.0.6
+9. After download completes, extract the contents using below command and navigate to install directory
+tax -xzvf ubuntu-18.04-x64.tar.gz && cd Install
+go to install directory and give the isntalled security agent script the execurte script permission
+
+chmod +x InstallSecurityAgent.sh
+sudo ./InstallSecurityAgent.sh -i -aui Device -aum SymmetricKey -f ../s.key -hn iot-ps-eastus.
+it contains the path to our symmetric key file, iot hub's hostname and deviceid
+this command
+a. installs any prerequisite software required
+b. then adds a service user with interactive sign-in disabled and adds the agent itself as a daemon
+c. configures pseudousers so that it can perform some tasks as root user
+d. configures the agent with authentication params that we provided
+
+reboot the device to complete installation
+now check the status: 
+systemctl status ASCIoTAgent.service
+make sure theagent is loaded and running
+Loaded: loaded (/etc/systemd/system/ASCIoTAgent.service; enabled; vendor preset: enabled)
+Active: active
+In Azure portal, in iothub, module identity status is changed to connected
