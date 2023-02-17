@@ -1,0 +1,33 @@
+Azure defender for IOT use advanced algorithms and machine learning to detect security threats in iot infra
+
+Alerts warn you when specific device behaviour deviates from its expected behaviour.
+
+Example: we have an iot device that tracks the temperature and humidity in a room, and allows managers to better monitor the room conditions
+we know that the software on the device is configured to send a message once every 10 seconds. so that we receive 6 messages in every minute,  but 
+if we start receivng 3 msgs per minute or may be 400 msgs per minute this suggests that there is an issue with the device.. may be there is no limit on no. of active 
+connections or certain inbound ip address ranges changes
+using these we can define our custom alerts
+
+we have 14 diff types of alerts dividided into 2 categories
+1. Alert where we are checking that a value falls in a certain range. we define min value, max value and time period within which it should apply
+it can be 5,10,15,20,25... minutes
+ex: we can check no. of file uploads or no. of device to cloud msgs for a given protocol or no. of rejected msgs
+2. operations that are not allowed
+Ex:inbound connection by ip address: we can specify ip address range, it does not prevent access to device instead create a alert in dashboard
+
+Security groups: logical collection of custom alerts
+diff rule for devices deployed in a specifc geographic location
+you ust specifyedvices to security group. by default there is default security group
+there can be diff devices with diff requirements
+
+Steps to assign Security Group to a device
+1. modify the device twin state and tag it
+"version":3,
+"tags":{
+"SecurityGroup":"default"
+},
+"properties":{}
+
+Create a tag collection and add SecurityGroup property along with name of our security group
+Her, tags collection should go after version property and before properties element
+we can use SG to define device with specific hardware or geo location
